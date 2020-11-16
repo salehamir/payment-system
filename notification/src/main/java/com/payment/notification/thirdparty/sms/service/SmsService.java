@@ -1,11 +1,11 @@
-package com.payment.notification.thirdparty.service;
+package com.payment.notification.thirdparty.sms.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.payment.notification.model.Notification;
-import com.payment.notification.thirdparty.model.SmsRequest;
-import com.payment.notification.thirdparty.model.SmsResponse;
+import com.payment.notification.thirdparty.sms.model.SmsRequest;
+import com.payment.notification.thirdparty.sms.model.SmsResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
-@Service
+@Component
 public class SmsService {
 
     private final WebClient webClient;
@@ -32,7 +32,7 @@ public class SmsService {
                 .body(BodyInserters.fromValue(request))
                 .exchangeToMono(clientResponse -> checkError(clientResponse)
                         .flatMap(res -> res.bodyToMono(SmsResponse.class)))
-                .map(res -> res.getStatue() != null && res.getStatue().equalsIgnoreCase("ok"));
+                .map(res -> res.getStatus() != null && res.getStatus().equalsIgnoreCase("ok"));
     }
 
     private Mono<ClientResponse> checkError(ClientResponse clientResponse) {

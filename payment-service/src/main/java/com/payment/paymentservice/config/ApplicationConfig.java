@@ -1,4 +1,4 @@
-package com.payment.user.config;
+package com.payment.paymentservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;

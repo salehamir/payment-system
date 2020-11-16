@@ -51,13 +51,6 @@
 			<artifactId>reactor-kafka</artifactId>
 			<version>1.2.4.RELEASE</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.github.tomakehurst</groupId>
-			<artifactId>wiremock-jre8</artifactId>
-			<version>${wiremock.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>

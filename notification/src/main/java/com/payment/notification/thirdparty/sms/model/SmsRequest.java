@@ -1,4 +1,4 @@
-package com.payment.notification.thirdparty.model;
+package com.payment.notification.thirdparty.sms.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
