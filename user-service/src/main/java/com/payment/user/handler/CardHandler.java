@@ -44,7 +44,7 @@ public class CardHandler {
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
-    private Mono<ServerResponse> removeCard(ServerRequest request) {
+    public Mono<ServerResponse> removeCard(ServerRequest request) {
         return Mono.just(request.pathVariable("id"))
                 .flatMap(service::removeCard)
                 .flatMap(t -> ServerResponse.ok()

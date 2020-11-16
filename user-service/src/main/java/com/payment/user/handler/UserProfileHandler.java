@@ -11,8 +11,6 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-/*@RestController
-@RequestMapping("/userProfileManagement/v1/userProfile")*/
 @Component
 @RequiredArgsConstructor
 public class UserProfileHandler {
