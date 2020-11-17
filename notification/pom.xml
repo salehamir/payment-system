@@ -15,7 +15,7 @@
 	<description>Send Message With SMS</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 		<wiremock.version>2.27.2</wiremock.version>
 	</properties>
 
