@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Flux;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
+import reactor.kafka.receiver.ReceiverRecord;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,11 +38,11 @@ public class ApplicationConfig {
 
     @Bean
     @Qualifier("smsReceiver")
-    public KafkaReceiver<String,String> smsReceiver(ReceiverOptions<String,String> kafkaOptions){
+    public Flux<ReceiverRecord<String, String>> smsReceiver(ReceiverOptions<String,String> kafkaOptions){
         ReceiverOptions<String, String> options = kafkaOptions
                 .subscription(Collections.singleton(smsTopic))
                 .addAssignListener(partitions -> log.log(Level.FINE,"onPartitionsAssigned {}", partitions))
                 .addRevokeListener(partitions -> log.log(Level.FINE,"onPartitionsRevoked {}", partitions));
-        return KafkaReceiver.create(options);
+        return KafkaReceiver.create(options).receive();
     }
 }

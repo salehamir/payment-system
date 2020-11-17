@@ -47,7 +47,7 @@ public class PaymentProviderTwo implements PaymentProvider {
                     if (res.getState() != null && res.getState().equalsIgnoreCase("success")) {
                         transfer.setStatus(TransferStatus.SUCCESS);
                         transfer.setTransactionCode(res.getTrackingCode());
-                        transfer.setTransactionTime(res.getTime());
+                        transfer.setTransactionTime(new Date());
                     } else {
                         transfer.setStatus(TransferStatus.FAILED);
                         transfer.setTransactionTime(new Date());

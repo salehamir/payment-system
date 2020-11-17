@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class PaymentHandler {
-    private PaymentService service;
+    private final PaymentService service;
 
     public Mono<ServerResponse> transfer(ServerRequest request){
         return request.bodyToMono(TransferRequest.class)
