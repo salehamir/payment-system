@@ -36,7 +36,7 @@ public class PaymentProviderOne implements PaymentProvider {
     public Mono<MoneyTransfer> transfer(TransferRequest request) {
 
         return webClient.post()
-                .uri(URI.create(providerUrl))
+                .uri(URI.create(providerUrl+"/transfer"))
                 .body(BodyInserters.fromValue(new ProviderRequestOne(request)))
                 .exchangeToMono(clientResponse -> util.checkError(clientResponse)
                         .flatMap(res -> res.bodyToMono(ProviderResponseOne.class)))

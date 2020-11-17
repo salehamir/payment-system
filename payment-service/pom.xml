@@ -55,6 +55,11 @@
 			<artifactId>reactor-kafka</artifactId>
 			<version>1.2.4.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>io.projectreactor.kafka</groupId>
+			<artifactId>reactor-kafka</artifactId>
+			<version>1.2.4.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>

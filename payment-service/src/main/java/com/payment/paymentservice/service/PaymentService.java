@@ -2,6 +2,7 @@ package com.payment.paymentservice.service;
 
 import com.payment.paymentservice.dto.TransferQuery;
 import com.payment.paymentservice.dto.TransferRequest;
+import com.payment.paymentservice.kafka.sender.PaymentNotificationSender;
 import com.payment.paymentservice.model.MoneyTransfer;
 import com.payment.paymentservice.repository.MoneyTransferRepository;
 import com.payment.paymentservice.thirdparty.PaymentProvider;
@@ -19,13 +20,17 @@ import java.util.UUID;
 public class PaymentService {
     private final PaymentProviderFactory providerFactory;
     private final MoneyTransferRepository repository;
+    private final PaymentNotificationSender notificationSender;
 
     public Mono<MoneyTransfer> transfer(TransferRequest request){
         PaymentProvider provider = providerFactory.getProvider(request.getSourceCardNumber());
         return provider.transfer(request).map(moneyTransfer -> {
             moneyTransfer.setId(UUID.randomUUID().toString());
             return moneyTransfer;
-        }).flatMap(repository::save);
+        }).flatMap(repository::save).map(transfer -> {
+            notificationSender.sendPaymentNotification(transfer);
+            return transfer;
+        });
     }
     public Flux<MoneyTransfer> findTransferByQuery(TransferQuery query){
         return repository.findAllBySourceCardNumberInAndTransactionTimeIsBetweenOrderByTransactionTimeDesc

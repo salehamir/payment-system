@@ -1,4 +1,4 @@
-package com.payment.notification.kafka.listener;
+package com.payment.notification.kafka.receiver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

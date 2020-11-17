@@ -1,4 +1,4 @@
-package com.payment.notification.model;
+package com.payment.user.kafka.sender;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
