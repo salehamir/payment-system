@@ -1,0 +1,57 @@
+{
+  "mappings": [
+    {
+      "id":"86e71ed1-de6a-4037-a7bc-6a9df84a96b0",
+      "request":
+      {
+      "urlPattern": "/smsController/send",
+      "method": "POST"
+      },
+     
+      "response":
+      {
+      "status": 200,
+      "headers":
+      {
+      "Content-Type" : "application/json"
+      },
+      "body": "{\"status\":\"ok\" }"
+      }
+     },
+     {
+      "id":"92575230-426d-4963-b4c1-bab5174c9764",
+      "request":
+      {
+        "urlPattern": "/paymentController/transfer",
+        "method": "POST"
+      },
+    
+      "response":
+      {
+        "status": 200,
+        "headers":
+        {
+          "Content-Type" : "application/json"
+        },
+        "body": "{\"status\":\"ok\",\"code\":\"test-payment-provider-one\" }"
+      }
+    },{
+      "id":"15a7401a-d481-4774-adc7-4ec4de3587b6",
+      "request":
+      {
+        "urlPattern": "/paymentTwoController",
+        "method": "POST"
+      },
+    
+      "response":
+      {
+        "status": 200,
+        "headers":
+        {
+          "Content-Type" : "application/json"
+        },
+        "body": "{\"state\":\"success\",\"trackingCode\":\"test-payment-provider-two\" }"
+      }
+    }
+  ]
+}
