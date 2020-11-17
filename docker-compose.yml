@@ -74,6 +74,8 @@ services:
       MONGODB_HOST: mongo
       MONGODB_PORT: 27017
       KAFKA_HOST: kafka:9092
+      PAYMENT_PROVIDER_ONE_URL: wiremock-standalone:8088
+      PAYMENT_PROVIDER_TWO_URL: wiremock-standalone:8088
 
   notification-service:
     build: ./notification
@@ -93,3 +95,18 @@ services:
       MONGODB_HOST: mongo
       MONGODB_PORT: 27017
       KAFKA_HOST: kafka:9092
+      SMS_PROVIDER_URL: wiremock-standalone:8088
+  wiremock-standalone:
+    build: ./wiremock_standalone
+    container_name: wiremock-standalone
+    restart: always
+    networks:
+      - payment_network
+    ports:
+      - "8088:8088"
+    depends_on:
+      - notification-service
+      - payment-service
+    links:
+      - notification-service
+      - payment-service

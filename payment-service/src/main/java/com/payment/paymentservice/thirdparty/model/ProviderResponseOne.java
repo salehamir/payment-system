@@ -10,5 +10,4 @@ import java.util.Date;
 public class ProviderResponseOne {
     private String status;
     private String code;
-    private Date time;
 }

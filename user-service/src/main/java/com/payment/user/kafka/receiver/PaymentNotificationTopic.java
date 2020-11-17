@@ -6,11 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payment.user.service.NotificationService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOffset;
+import reactor.kafka.receiver.ReceiverRecord;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
@@ -18,24 +22,24 @@ import java.util.Date;
 import java.util.logging.Level;
 
 @Component
+@Scope("singleton")
 @Log
 public class PaymentNotificationTopic {
 
-    private final KafkaReceiver<String, String> paymentNotificationReceiver;
+    private final Flux<ReceiverRecord<String, String>> paymentNotificationReceiver;
     private final NotificationService service;
     private final SimpleDateFormat dateFormat;
     private final ObjectMapper mapper;
 
-    public PaymentNotificationTopic(@Qualifier("paymentNotificationReceiver") KafkaReceiver<String, String> paymentNotificationReceiver, NotificationService service) {
+    public PaymentNotificationTopic(@Qualifier("paymentNotificationReceiver") Flux<ReceiverRecord<String, String>> paymentNotificationReceiver, NotificationService service) {
         this.paymentNotificationReceiver = paymentNotificationReceiver;
         this.service = service;
         mapper = new ObjectMapper();
         dateFormat = new SimpleDateFormat("HH:mm:ss:SSS z dd MMM yyyy");
     }
-
-    @PostConstruct
-    public Flux<Boolean> listenTopic() {
-        return paymentNotificationReceiver.receive().flatMap(record -> {
+    @EventListener(ApplicationStartedEvent.class)
+    public void listenTopic() {
+        paymentNotificationReceiver.flatMap(record -> {
             ReceiverOffset offset = record.receiverOffset();
             log.log(Level.INFO, String.format(
                     "Received message: topic-partition=%s offset=%d timestamp=%s key=%s value=%s",
@@ -58,7 +62,7 @@ public class PaymentNotificationTopic {
                             return res;
                         }
                     });
-        });
+        }).subscribe();
 
     }
 

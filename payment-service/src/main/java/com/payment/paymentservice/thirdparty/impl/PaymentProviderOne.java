@@ -36,7 +36,7 @@ public class PaymentProviderOne implements PaymentProvider {
     public Mono<MoneyTransfer> transfer(TransferRequest request) {
 
         return webClient.post()
-                .uri(URI.create(providerUrl+"/transfer"))
+                .uri(URI.create(providerUrl + "/transfer"))
                 .body(BodyInserters.fromValue(new ProviderRequestOne(request)))
                 .exchangeToMono(clientResponse -> util.checkError(clientResponse)
                         .flatMap(res -> res.bodyToMono(ProviderResponseOne.class)))
@@ -48,7 +48,7 @@ public class PaymentProviderOne implements PaymentProvider {
                     if (res.getStatus() != null && res.getStatus().equalsIgnoreCase("ok")) {
                         transfer.setStatus(TransferStatus.SUCCESS);
                         transfer.setTransactionCode(res.getCode());
-                        transfer.setTransactionTime(res.getTime());
+                        transfer.setTransactionTime(new Date());
                     } else {
                         transfer.setStatus(TransferStatus.FAILED);
                         transfer.setTransactionTime(new Date());

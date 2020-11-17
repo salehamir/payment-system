@@ -1,12 +1,11 @@
 package com.payment.user.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProfileRef {
-    private final String username;
+    private String username;
 }

@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
+import reactor.core.publisher.Flux;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
+import reactor.kafka.receiver.ReceiverRecord;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 
@@ -49,12 +51,12 @@ public class ApplicationConfig implements WebFluxConfigurer {
 
     @Bean
     @Qualifier("paymentNotificationReceiver")
-    public KafkaReceiver<String,String> paymentNotificationReceiver(ReceiverOptions<String,String> receiverOptions){
+    public Flux<ReceiverRecord<String, String>> paymentNotificationReceiver(ReceiverOptions<String,String> receiverOptions){
         ReceiverOptions<String, String> options = receiverOptions
                 .subscription(Collections.singleton(paymentNotificationTopic))
                 .addAssignListener(partitions -> log.log(Level.FINE,"onPartitionsAssigned {}", partitions))
                 .addRevokeListener(partitions -> log.log(Level.FINE,"onPartitionsRevoked {}", partitions));
-        return KafkaReceiver.create(options);
+        return KafkaReceiver.create(options).receive();
     }
     @Bean
     public SenderOptions<String, String> senderOptions() {
