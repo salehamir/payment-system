@@ -1,0 +1,95 @@
+version: "2"
+networks:
+  payment_network:
+    driver: bridge
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper_stub
+    restart: always
+    networks:
+      - payment_network
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka_stub
+    restart: always
+    networks:
+      - payment_network
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper:zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: channelA:1:1, channelB:1:1
+
+  mongo:
+    container_name: mongo_stub
+    image: mongo
+    networks:
+      - payment_network
+    ports:
+      - "27017:27017"
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    restart: always
+    networks:
+      - payment_network
+    ports:
+      - "8084:8084"
+    depends_on:
+      - kafka
+      - mongo
+    links:
+      - kafka
+      - mongo
+    environment:
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      KAFKA_HOST: kafka:9092
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    restart: always
+    networks:
+      - payment_network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+      - mongo
+    links:
+      - kafka
+      - mongo
+    environment:
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      KAFKA_HOST: kafka:9092
+
+  notification-service:
+    build: ./notification
+    container_name: notification-service
+    restart: always
+    networks:
+      - payment_network
+    ports:
+      - "8086:8086"
+    depends_on:
+      - kafka
+      - mongo
+    links:
+      - kafka
+      - mongo
+    environment:
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      KAFKA_HOST: kafka:9092
