@@ -1,4 +1,4 @@
-version: "3.2"
+version: "2"
 networks:
   payment_network:
     driver: bridge
@@ -10,7 +10,7 @@ services:
     networks:
       - payment_network
     ports:
-      - 2181:2181
+      - "2181:2181"
 
   kafka:
     image: wurstmeister/kafka
@@ -19,7 +19,7 @@ services:
     networks:
       - payment_network
     ports:
-      - 9092:9092
+      - "9092:9092"
     depends_on:
       - zookeeper
     links:
@@ -35,7 +35,7 @@ services:
     networks:
       - payment_network
     ports:
-      - 27017:27007
+      - "27017:27017"
 
   user-service:
     build: ./user-service
@@ -44,7 +44,7 @@ services:
     networks:
       - payment_network
     ports:
-      - 8084:8084
+      - "8084:8084"
     depends_on:
       - kafka
       - mongo
@@ -63,7 +63,7 @@ services:
     networks:
       - payment_network
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - kafka
       - mongo
@@ -82,7 +82,7 @@ services:
     networks:
       - payment_network
     ports:
-      - 8082:8082
+      - "8086:8086"
     depends_on:
       - kafka
       - mongo

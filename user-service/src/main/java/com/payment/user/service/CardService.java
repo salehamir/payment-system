@@ -26,7 +26,7 @@ public class CardService {
 
     private Mono<Card> getByIdAndUser(String cardNumber, String username) {
         return Mono.just(new UserProfileRef(username))
-                .flatMap(user -> repository.findByIdAndAndUser(cardNumber, user));
+                .flatMap(user -> repository.findByCardNumberAndAndUser(cardNumber, user));
     }
 
     public Mono<Card> addCard(Card card) {

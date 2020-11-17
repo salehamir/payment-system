@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class RouterConfig {
 
 
-    private static final String BASE_PATH = "/userProfileService/v1/";
+    private static final String BASE_PATH = "/userProfileService/v1";
 
     @Bean
     public RouterFunction<ServerResponse> routes(CardHandler cardHandler, UserProfileHandler userProfileHandler) {

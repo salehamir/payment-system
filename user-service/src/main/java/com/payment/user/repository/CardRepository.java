@@ -10,6 +10,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface CardRepository extends ReactiveMongoRepository<Card,String> {
     Flux<Card> findByUser(UserProfileRef user);
-    Mono<Card> findByIdAndAndUser(String cardNumber,UserProfileRef user);
+    Mono<Card> findByCardNumberAndAndUser(String cardNumber,UserProfileRef user);
 
 }
